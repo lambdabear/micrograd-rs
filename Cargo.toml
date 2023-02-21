@@ -1,0 +1,18 @@
+[package]
+name = "micrograd"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num-traits = "0.2"
+layout-rs = "0.1"
+rand = { version = "0.8", features = ["std", "std_rng"] }
+thiserror = "1.0"
+
+[dev-dependencies]
+eframe = "0.21"
+egui_extras = { version = "0.21", features = ["image"] }
+image = { version = "0.24", default-features = false, features = ["png"] }
+resvg = "0.29"
