@@ -1,5 +1,5 @@
 use super::engine::Scalar;
-use rand::Rng;
+use rand::{rngs::ThreadRng, Rng};
 use thiserror::Error;
 
 pub struct Neuron {
@@ -9,8 +9,7 @@ pub struct Neuron {
 }
 
 impl Neuron {
-    pub fn new(nin: usize, nonlin: bool) -> Self {
-        let mut rng = rand::thread_rng();
+    pub fn new(nin: usize, nonlin: bool, rng: &mut ThreadRng) -> Self {
         let mut w = vec![];
 
         for _ in 0..nin {
@@ -61,11 +60,11 @@ pub struct Layer {
 }
 
 impl Layer {
-    pub fn new(nin: usize, nout: usize, nonlin: bool) -> Self {
+    pub fn new(nin: usize, nout: usize, nonlin: bool, rng: &mut ThreadRng) -> Self {
         let mut neurons = vec![];
 
         for _ in 0..nout {
-            neurons.push(Neuron::new(nin, nonlin));
+            neurons.push(Neuron::new(nin, nonlin, rng));
         }
 
         Self { neurons }
@@ -93,15 +92,20 @@ pub struct MLP {
 }
 
 impl MLP {
-    pub fn new(nin: usize, nouts: &[usize]) -> Self {
+    pub fn new(nin: usize, nouts: &[usize], rng: &mut ThreadRng) -> Self {
         let mut layers = vec![];
 
         if nouts.len() > 0 {
-            layers.push(Layer::new(nin, nouts[0], 0 != nouts.len() - 1));
+            layers.push(Layer::new(nin, nouts[0], 0 != nouts.len() - 1, rng));
 
             if nouts.len() > 1 {
                 for i in 0..nouts.len() - 1 {
-                    layers.push(Layer::new(nouts[i], nouts[i + 1], i != nouts.len() - 2))
+                    layers.push(Layer::new(
+                        nouts[i],
+                        nouts[i + 1],
+                        i != nouts.len() - 2,
+                        rng,
+                    ))
                 }
             }
         }

@@ -1,7 +1,8 @@
 use micrograd::{engine::Scalar, nn::MLP};
 
 fn main() {
-    let mut mlp = MLP::new(3, &[4, 4, 1]);
+    let mut rng = rand::thread_rng();
+    let mut mlp = MLP::new(3, &[4, 4, 1], &mut rng);
 
     let xs = [
         [2.0, 3.0, -1.0],
